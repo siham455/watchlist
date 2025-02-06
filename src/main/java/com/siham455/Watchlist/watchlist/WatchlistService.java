@@ -1,4 +1,4 @@
-package com.siham455.Watchlist.watchlists;
+package com.siham455.Watchlist.watchlist;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WatchlistService{
   public final WatchlistRepository watchlistRepository;
 
-  public watchlistService(WatchlistRepository watchlistRepository) {
+  public WatchlistService(WatchlistRepository watchlistRepository) {
     this.watchlistRepository = watchlistRepository;
   }
 
-  // List<watchlistEntity> getAllTitles()
-  public List<WatchlistEntity> getAllTitles(@RequestParam(required = false) String title) {
+  // List<Watchlist> getAllTitles()
+  public List<Watchlist> getAllTitles(@RequestParam(required = false) String title) {
     if (title != null) {
       return this.getAllTitles(title);
     } else {
@@ -25,8 +25,8 @@ public class WatchlistService{
     }
   }
 
-  // Watchlist getwatchlistEntity(UUID id) throws NoSuchElementException
-  public WatchlistEntity getwatchlistEntity(UUID id) throws NoSuchElementException {
+  // Watchlist getWatchlist(UUID id) throws NoSuchElementException
+  public Watchlist getWatchlist(UUID id) throws NoSuchElementException {
     try {
       return this.watchlistRepository.findById(id).orElseThrow(); 
     } catch (NoSuchElementException e) {
@@ -34,13 +34,13 @@ public class WatchlistService{
     }
   }
 
-  public WatchlistEntity createWatchlist(WatchlistEntity watchList) throws IllegalArgumentException, OptimisticLockingFailureException {
+  public Watchlist createWatchlist(Watchlist watchList) throws IllegalArgumentException, OptimisticLockingFailureException {
     this.watchlistRepository.save(watchList);
     return watchList;
   }
 
-  public WatchlistEntity updateItem(UUID id, WatchlistEntity updatedItem) throws NoSuchElementException {
-    WatchlistEntity item = WatchlistRepository.findById(id).orElseThrow();
+  public Watchlist updateItem(UUID id, Watchlist updatedItem) throws NoSuchElementException {
+    Watchlist item = watchlistRepository.findById(id).orElseThrow();
 
     // Update the item fields
     item.setTitle(updatedItem.getTitle());
@@ -53,19 +53,19 @@ public class WatchlistService{
     item.setGenre(updatedItem.getGenre());
     
     // save the updated IOU
-    return WatchlistRepository.save(item);
+    return watchlistRepository.save(item);
   }
 
   // Delete a watchlist item by ID
   public void deleteItem(UUID id) throws NoSuchElementException {
-    if (WatchlistRepository.findById(id).isPresent()) {
-        WatchlistRepository.deleteById(id);
+    if (watchlistRepository.findById(id).isPresent()) {
+        watchlistRepository.deleteById(id);
     } else {
         throw new NoSuchElementException();
     }
   }
 
-  public List<WatchlistEntity> findBy( id) {
-    ///
-  }
+//   public List<Watchlist> findBy( id) {
+//     ///
+//   }
 }

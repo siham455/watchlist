@@ -1,4 +1,4 @@
-package com.siham455.Watchlist.watchlists;
+package com.siham455.Watchlist.watchlist;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,34 +24,34 @@ import org.springframework.web.server.ResponseStatusException;
 public class WatchlistController {
   private WatchlistService watchlistService;
 
-  public watchlistController(WatchlistService watchlistService) {
+  public WatchlistController(WatchlistService watchlistService) {
     this.watchlistService = watchlistService;
   }
 
   // Get all watchlist items, optionally filtered by titles
   @GetMapping
-  public List<WatchlistEntity> getAllTitles(@RequestParam(required = false) String title) {
+  public List<Watchlist> getAllTitles(@RequestParam(required = false) String title) {
     return this.watchlistService.getAllTitles(title);
   }
 
   // Get a specific watchlist item by ID
   @GetMapping("/{id}")
-  public WatchlistEntity getwatchlist(@PathVariable UUID id) {
+  public Watchlist getwatchlist(@PathVariable UUID id) {
     try {
-      return this.watchlistService.getWatchlistEntity(id);
+      return this.watchlistService.getWatchlist(id);
     } catch (NoSuchElementException exception) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "IOU not found", exception);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, " not found", exception);
     }
   }
 
  /*@GetMapping
-  public List<watchlistEntity> getALLFilters() {
+  public List<Watchlist> getALLFilters() {
     return this.WatchlistService.getALLFilters();
   }
 
   // Get a specific watchlist item by ID
   @GetMapping("/{id}")
-  public watchlistEntity getwatchlistEntity(@PathVariable UUID id) {
+  public Watchlist getWatchlist(@PathVariable UUID id) {
       try {
         return this.WatchlistService.getFilter(id);
       } catch (NoSuchElementException exception) {

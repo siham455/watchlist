@@ -1,4 +1,4 @@
-package com.siham455.Watchlist.watchlists;
+package com.siham455.Watchlist.watchlist;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "watchlist")
-public class WatchlistEntity {
+public class Watchlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +28,7 @@ public class WatchlistEntity {
     private String genre;
     private Instant dateTime;
 
-    public WatchlistEntity(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
+    public Watchlist(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
         this.title = title;
         this.type = type;
         this.averageDuration = averageDuration;
@@ -40,7 +40,7 @@ public class WatchlistEntity {
         this.dateTime = createdAt;
     }
     // Default constructor
-    public WatchlistEntity() {
+    public Watchlist() {
         this("", "", 0, null, null, false, 0.0, "", Instant.now());
     }
 
