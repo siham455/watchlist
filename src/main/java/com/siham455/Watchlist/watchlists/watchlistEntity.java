@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "watchlist")
-public class watchlistEntity {
+public class WatchlistEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +28,7 @@ public class watchlistEntity {
     private String genre;
     private Instant dateTime;
 
-    public watchlistEntity(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
+    public WatchlistEntity(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
         this.title = title;
         this.type = type;
         this.averageDuration = averageDuration;
@@ -40,7 +40,7 @@ public class watchlistEntity {
         this.dateTime = createdAt;
     }
     // Default constructor
-    public watchlistEntity() {
+    public WatchlistEntity() {
         this("", "", 0, null, null, false, 0.0, "", Instant.now());
     }
 

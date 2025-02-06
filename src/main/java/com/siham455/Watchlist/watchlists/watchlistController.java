@@ -21,16 +21,27 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/watchlist")
-public class watchlistController {
-  private watchlistService WatchlistService;
+public class WatchlistController {
+  private WatchlistService watchlistService;
 
-  public watchlistController(watchlistService WatchlistService) {
-    this.WatchlistService = WatchlistService;
+  public watchlistController(WatchlistService watchlistService) {
+    this.watchlistService = watchlistService;
   }
 
+  // Get all watchlist items, optionally filtered by titles
   @GetMapping
-  public List<watchlistEntity> getAllTitles() {
-    return this.WatchlistService.getAllTitles();
+  public List<WatchlistEntity> getAllTitles(@RequestParam(required = false) String title) {
+    return this.watchlistService.getAllTitles(title);
+  }
+
+  // Get a specific watchlist item by ID
+  @GetMapping("/{id}")
+  public WatchlistEntity getwatchlist(@PathVariable UUID id) {
+    try {
+      return this.watchlistService.getWatchlistEntity(id);
+    } catch (NoSuchElementException exception) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "IOU not found", exception);
+    }
   }
 
  /*@GetMapping
