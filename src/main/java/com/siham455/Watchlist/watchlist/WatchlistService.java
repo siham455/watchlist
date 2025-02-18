@@ -19,9 +19,9 @@ public class WatchlistService{
   // List<Watchlist> getAllTitles()
   public List<Watchlist> getAllTitles(@RequestParam(required = false) String title) {
     if (title != null) {
-      return this.getAllTitles(title);
+        return this.watchlistRepository.findByTitle(title); // Use repository method
     } else {
-      return this.watchlistRepository.findAll();
+        return this.watchlistRepository.findAll();
     }
   }
 
@@ -52,7 +52,7 @@ public class WatchlistService{
     item.setImdbRating(updatedItem.getImdbRating());
     item.setGenre(updatedItem.getGenre());
     
-    // save the updated IOU
+    // save the updated watchlist
     return watchlistRepository.save(item);
   }
 

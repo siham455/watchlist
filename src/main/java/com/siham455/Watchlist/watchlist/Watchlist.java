@@ -3,10 +3,14 @@ package com.siham455.Watchlist.watchlist;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.siham455.Watchlist.users.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
@@ -28,6 +32,10 @@ public class Watchlist {
     private String genre;
     private Instant dateTime;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id") 
+    private User user;
+
     public Watchlist(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
         this.title = title;
         this.type = type;
@@ -41,7 +49,7 @@ public class Watchlist {
     }
     // Default constructor
     public Watchlist() {
-        this("", "", 0, null, null, false, 0.0, "", Instant.now());
+        this("Thunder", "Movie", 100, 1, 1, true, 8.8, "Action", Instant.now());
     }
 
     // Getters and Setters
