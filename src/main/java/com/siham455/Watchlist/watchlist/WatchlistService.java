@@ -8,6 +8,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.siham455.Watchlist.users.User;
+
 @Service
 public class WatchlistService{
   public final WatchlistRepository watchlistRepository;
@@ -17,12 +19,9 @@ public class WatchlistService{
   }
 
   // List<Watchlist> getAllTitles()
-  public List<Watchlist> getAllTitles(@RequestParam(required = false) String title) {
-    if (title != null) {
-        return this.watchlistRepository.findByTitle(title); // Use repository method
-    } else {
-        return this.watchlistRepository.findAll();
-    }
+  public List<Watchlist> getAllTitles() {
+    return this.watchlistRepository.findByUserAndTitle(user, title); // Use repository method
+    
   }
 
   // Watchlist getWatchlist(UUID id) throws NoSuchElementException
@@ -34,7 +33,7 @@ public class WatchlistService{
     }
   }
 
-  public Watchlist createWatchlist(Watchlist watchList) throws IllegalArgumentException, OptimisticLockingFailureException {
+  public Watchlist createWatchlist(User user, Watchlist watchList) throws IllegalArgumentException, OptimisticLockingFailureException {
     this.watchlistRepository.save(watchList);
     return watchList;
   }

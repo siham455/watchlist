@@ -36,7 +36,8 @@ public class Watchlist {
     @JoinColumn(name = "user_id") 
     private User user;
 
-    public Watchlist(String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
+    public Watchlist(User user, String title, String type, int averageDuration, Integer seasons, Integer episodes, boolean bingeWorthy, double imdbRating, String genre, Instant createdAt) {
+        this.user = user;
         this.title = title;
         this.type = type;
         this.averageDuration = averageDuration;
@@ -49,7 +50,7 @@ public class Watchlist {
     }
     // Default constructor
     public Watchlist() {
-        this("Thunder", "Movie", 100, 1, 1, true, 8.8, "Action", Instant.now());
+        this(null, "Thunder", "Movie", 100, 1, 1, true, 8.8, "Action", Instant.now());
     }
 
     // Getters and Setters
