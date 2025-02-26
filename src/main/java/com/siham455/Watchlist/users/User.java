@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.siham455.Watchlist.watchlist.Watchlist;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +23,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Watchlist> watchlist;
 
     public User(String firstName, String lastName){
