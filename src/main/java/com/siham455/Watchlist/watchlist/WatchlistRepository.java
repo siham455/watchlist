@@ -13,13 +13,11 @@ public interface WatchlistRepository extends ListCrudRepository<Watchlist, UUID>
     List<Watchlist> findByUserAndImdbRatingGreaterThanEqual(User user, double rating);
     List<Watchlist> findByUserAndBingeWorthy(User user, boolean bingeWorthy);
     List<Watchlist> findByUserAndTitle(User user, String title);
+    List<Watchlist> findByUserAndType(User user, String type);
 
 
     // Find all watchlist items with an above-average IMDb rating (custom query)
     @Query("SELECT w FROM Watchlist w WHERE w.imdbRating > (SELECT AVG(w2.imdbRating) FROM Watchlist w2)")
-    List<Watchlist> findHighValueItems();
+    List<Watchlist> findHighValue();
 
-    // Find all watchlist items with a below or equal to average IMDb rating (custom query)
-    @Query("SELECT w FROM Watchlist w WHERE w.imdbRating <= (SELECT AVG(w2.imdbRating) FROM Watchlist w2)")
-    List<Watchlist> findLowValueItems();
 }

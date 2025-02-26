@@ -128,4 +128,12 @@ public class Watchlist {
     public void setDateTime(Instant dateTime) {
         this.dateTime = dateTime;
     }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    
 }
