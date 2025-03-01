@@ -18,15 +18,14 @@ public class WatchlistService{
     this.watchlistRepository = watchlistRepository;
   }
 
-  // List<Watchlist> getAllUsers()
+
   public List<Watchlist> getAllUsers(User user) {
-    return this.watchlistRepository.findByUser(user); // Use repository method
+    return this.watchlistRepository.findByUser(user); 
     
   }
 
-  // List<Watchlist> getAllTitles()
   public List<Watchlist> getAllTitles(User user, String title) {
-    return this.watchlistRepository.findByUserAndTitle(user, title); // Use repository method
+    return this.watchlistRepository.findByUserAndTitle(user, title); 
     
   }
 
