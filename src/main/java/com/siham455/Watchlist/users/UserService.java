@@ -7,33 +7,14 @@ import java.util.UUID;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
-import com.siham455.Watchlist.watchlist.Watchlist;
-import com.siham455.Watchlist.watchlist.WatchlistRepository;
-
 @Service
 public class UserService{
 
 private UserRepository userRepository;
-private final WatchlistRepository watchlistRepository;
 
-public UserService(UserRepository userRepository, WatchlistRepository watchlistRepository) {
+public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.watchlistRepository = watchlistRepository;
 }
-
-// Add a watchlist to a user
-public Watchlist addWatchlistToUser(UUID userId, Watchlist watchlistItem) {
-    User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
-    watchlistItem.setUser(user);
-    return watchlistRepository.save(watchlistItem);
-}
-
-// Get all watchlist for a user
-public List<Watchlist> getWatchlistByUser(UUID userId) {
-    User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
-    return watchlistRepository.findByUser(user);
-}
-
 
 public List<User> getAllUsers() {
     return this.userRepository.findAll();
