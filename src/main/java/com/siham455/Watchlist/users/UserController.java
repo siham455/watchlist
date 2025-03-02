@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 
@@ -50,21 +51,30 @@ public class UserController{
 
     }
 
-    // Get a user by ID
     @GetMapping("/{id}")
     public User getUserById(@PathVariable UUID id) {
-        return userService.getUserById(id);
+        try {
+            return userService.getUserById(id);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
+        }
     }
 
-    // Update a user
     @PutMapping("/{id}")
     public User updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
-        return userService.updateUser(id, updatedUser);
+        try {
+            return userService.updateUser(id, updatedUser);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
+        }
     }
 
-    // Delete a user
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
+        try {
+            userService.deleteUser(id);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
+        }
     }
 }
