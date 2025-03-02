@@ -19,13 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.siham455.Watchlist.WatchlistApplication;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -116,7 +111,7 @@ public class UserControllerTest {
 		User user = selectRandomUser();
 		URI endpoint = getEndpoint(user);
 
-		when(userService.getUser(any(UUID.class))).thenReturn(user);
+		when(userService.getUserById(any(UUID.class))).thenReturn(user);
 
 		// Act
 		ResponseEntity<User> response = restTemplate.getForEntity(endpoint, User.class);
@@ -125,7 +120,7 @@ public class UserControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(user.getId(), response.getBody().getId());
-		verify(userService).getUser(user.getId());
+		verify(userService).getUserById(user.getId());
 	}
 
 	@Test
@@ -135,14 +130,14 @@ public class UserControllerTest {
 		User user = createNewUser();
 		URI endpoint = getEndpoint(user);
 
-		when(userService.getUser(any(UUID.class))).thenThrow(NoSuchElementException.class);
+		when(userService.getUserById(any(UUID.class))).thenThrow(NoSuchElementException.class);
 
 		// Act
 		ResponseEntity<User> response = restTemplate.getForEntity(endpoint, User.class);
 
 		// Assert
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		verify(userService).getUser(user.getId());
+		verify(userService).getUserById(user.getId());
 	}
 
 	@Test
@@ -152,11 +147,12 @@ public class UserControllerTest {
 		User user = selectRandomUser();
 		URI endpoint = getEndpoint(user);
 
-		when(userService.getUser(any(UUID.class))).thenReturn(user);
+		when(userService.getUserById(any(UUID.class))).thenReturn(user);
 		when(userService.updateUser(any(UUID.class), any(User.class))).thenReturn(user);
 
 		// Act
-		user.setLender("UpdatedLender");
+		user.setFirstName("UpdatedFirstName");
+		user.setLastName("UpdatedLastName");
 		restTemplate.put(endpoint, user);
 
 		ResponseEntity<User> response = restTemplate.getForEntity(endpoint, User.class);
@@ -165,8 +161,9 @@ public class UserControllerTest {
 		// Assert
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(user.getId(), updatedUser.getId());
-		assertEquals("UpdatedLender", updatedUser.getLender());
-		verify(userService).getUser(user.getId());
+		assertEquals("UpdatedFirstName", updatedUser.getFirstName());
+		assertEquals("UpdatedLastName", updatedUser.getLastName());
+		verify(userService).getUserById(user.getId());
 		verify(userService).updateUser(any(UUID.class), any(User.class));
 	}
 
@@ -196,14 +193,14 @@ public class UserControllerTest {
 		User user = selectRandomUser();
 		URI endpoint = getEndpoint(user);
 
-		when(userService.getUser(any(UUID.class))).thenReturn(user);
+		when(userService.getUserById(any(UUID.class))).thenReturn(user);
 
 		ResponseEntity<User> foundResponse = restTemplate.getForEntity(endpoint, User.class);
 
 		doAnswer(invocation -> {
 			return null;
 		}).when(userService).deleteUser(any(UUID.class));
-		when(userService.getUser(any(UUID.class))).thenThrow(NoSuchElementException.class);
+		when(userService.getUserById(any(UUID.class))).thenThrow(NoSuchElementException.class);
 
 		// Act
 		RequestEntity<?> request = RequestEntity.delete(endpoint).accept(MediaType.APPLICATION_JSON).build();
@@ -243,26 +240,11 @@ public class UserControllerTest {
 	}
 
 	private User createNewUser() {
-		return setId(new User("John", "Alice", new BigDecimal("100.00"), getInstant(0)));
+		return setId(new User("John", "Alice"));
 	}
 
 	private URI getEndpoint(User user) {
 		return appendPath(baseURI, user.getId().toString());
-	}
-
-	private Instant getInstant(int hoursToSubtract) {
-		// Get the current date and time in the system's default time zone
-		ZoneId systemTimeZone = ZoneId.systemDefault();
-		ZonedDateTime currentDateTime = ZonedDateTime.now(systemTimeZone);
-
-		// Subtract the specified number of hours using Duration
-		Duration duration = Duration.ofHours(hoursToSubtract);
-		ZonedDateTime resultDateTime = currentDateTime.minus(duration);
-
-		// Convert to Instant
-		Instant instant = resultDateTime.toInstant();
-
-		return instant;
 	}
 
 	private URI appendPath(URI uri, String path) {
