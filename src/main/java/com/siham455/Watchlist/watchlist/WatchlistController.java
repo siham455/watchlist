@@ -27,7 +27,7 @@ import com.siham455.Watchlist.users.UserService;
 public class WatchlistController {
   
     private WatchlistService watchlistService;
-    private final UserService userService;
+    private UserService userService;
 
 
     public WatchlistController(WatchlistService watchlistService, UserService userService) {
@@ -35,39 +35,41 @@ public class WatchlistController {
         this.userService = userService;
     }
 
-  // Get all watchlist titles for specific user
+
     @GetMapping
-    public ResponseEntity<List<Watchlist>> getAllTitle(@PathVariable UUID userId, @RequestParam(required = false) String title) {
+    public ResponseEntity<List<Watchlist>> getWatchlist(@PathVariable UUID userId, @RequestParam(required = false) String title) {
         try {
             User user = userService.getUserById(userId);
-            List<Watchlist> watchlistTitles;
-            if (user != null) {
-                watchlistTitles = watchlistService.getAllTitles(user, title);
-            } else {
-                watchlistTitles = watchlistService.getAllUsers(user);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
             }
+            List<Watchlist> watchlistTitles = watchlistService.getAllTitles(user, title);
             return new ResponseEntity<>(watchlistTitles, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
         }
     }
+    
 
 
-  // Get a specific watchlist by ID
     @GetMapping("/{id}")
     public Watchlist getWatchlist(@PathVariable UUID userId, @PathVariable UUID id) {
         try {
             return this.watchlistService.getWatchlist(id);
         } catch (NoSuchElementException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Watchlist not found", exception);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Title not found", exception);
         }
     }
 
-  // Create a new watchlist
+ 
     @PostMapping
     public ResponseEntity<Watchlist> createWatchlist(@PathVariable UUID userId, @RequestBody Watchlist watchlist) {
         try {
-            Watchlist createdTitle = watchlistService.createWatchlist(watchlist.getUser(), watchlist);
+            User user = userService.getUserById(userId);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+            Watchlist createdTitle = watchlistService.createWatchlist(user, watchlist);
             return new ResponseEntity<>(createdTitle, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data", e);
@@ -86,7 +88,7 @@ public class WatchlistController {
         }
     }
 
-    // Delete a watchlist item by ID
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWatchlist(@PathVariable UUID userId, @PathVariable UUID id) {
         try {
@@ -97,13 +99,13 @@ public class WatchlistController {
         }
     }
 
-    // Get all watchlist items with an above-average IMDb rating
+
     @GetMapping("/high-value")
     public ResponseEntity<List<Watchlist>> getHighValueTitles(@PathVariable UUID userId) {
         return ResponseEntity.ok(watchlistService.getHighValueTitles());
     }
 
-    // Get all watchlist items for a specific user filtered by genre
+
     @GetMapping("/genre/{genre}")
     public ResponseEntity<List<Watchlist>> getWatchlistByGenre(@PathVariable UUID userId, @PathVariable String genre) {
         try {
@@ -115,7 +117,7 @@ public class WatchlistController {
         }
     }
 
-    @GetMapping("/binge-worthy/{binge-worthy}")
+    @GetMapping("/binge-worthy/{bingeWorthy}")
     public ResponseEntity<List<Watchlist>> getWatchlistByBingeWorthy(@PathVariable UUID userId, @PathVariable boolean bingeWorthy) {
         try {
             User user = userService.getUserById(userId);
@@ -126,12 +128,12 @@ public class WatchlistController {
         }
     }
 
-    // Get all watchlist items for a specific user filtered by genre
+ 
     @GetMapping("/type/{type}")
     public ResponseEntity<List<Watchlist>> getWatchlistByType(@PathVariable UUID userId, @PathVariable String type) {
         try {
             User user = userService.getUserById(userId);
-            List<Watchlist> watchlistTitle = watchlistService.getByUserAndGenre(user, type);
+            List<Watchlist> watchlistTitle = watchlistService.getByUserAndType(user, type);
             return new ResponseEntity<>(watchlistTitle, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
