@@ -18,17 +18,14 @@ public class WatchlistService{
     this.watchlistRepository = watchlistRepository;
   }
 
+
   public List<Watchlist> getAllUsers(User user) {
-    return this.watchlistRepository.findByUser(user);
+    return this.watchlistRepository.findByUser(user); 
     
   }
 
   public List<Watchlist> getAllTitles(User user, String title) {
-    if (title != null && !title.isEmpty()) {
-      return this.watchlistRepository.findByUserAndTitle(user, title);
-    } else {
-      return this.watchlistRepository.findByUser(user);
-    }
+    return this.watchlistRepository.findByUserAndTitle(user, title); 
   }
 
   public List<Watchlist> getByUserAndBingeWorthy(User user, boolean bingeWorthy) {
