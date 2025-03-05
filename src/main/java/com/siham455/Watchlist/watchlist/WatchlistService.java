@@ -19,13 +19,8 @@ public class WatchlistService{
   }
 
 
-  public List<Watchlist> getAllUsers(User user) {
-    return this.watchlistRepository.findByUser(user); 
-    
-  }
-
   public List<Watchlist> getAllTitles(User user, String title) {
-    return this.watchlistRepository.findByUserAndTitle(user, title); 
+    return this.watchlistRepository.findByUser(user); 
   }
 
   public List<Watchlist> getByUserAndBingeWorthy(User user, boolean bingeWorthy) {
