@@ -142,4 +142,4 @@ The project includes unit and integration tests using JUnit and Mockito. To run 
 
 ## SQL Dump File
 
-Atach as a folder in my repository.
+Attach as a folder in my repository, folder labelled DumpFile.
