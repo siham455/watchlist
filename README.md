@@ -66,6 +66,7 @@ The **Watchlist Application** is a Spring Boot-based REST API designed to help u
 | POST   | `/api/users/{userId}/watchlist`               | Add a new watchlist title.           |
 | PUT    | `/api/users/{userId}/watchlist/{id}`          | Update a watchlist title by ID.      |
 | DELETE | `/api/users/{userId}/watchlist/{id}`          | Delete a watchlist title by ID.      |
+| GET    | `/api/users/{userId}/watchlist/title/{title}` | Get watchlist by title.              |
 | GET    | `/api/users/{userId}/watchlist/high-value`    | Get high-value titles (IMDb ≥ avg).  |
 | GET    | `/api/users/{userId}/watchlist/genre/{genre}` | Get watchlist titles by genre.       |
 | GET    | `/api/users/{userId}/watchlist/type/{type}`   | Get watchlist titles by type.        |
