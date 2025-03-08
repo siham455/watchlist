@@ -19,7 +19,12 @@ public class WatchlistService{
   }
 
 
-  public List<Watchlist> getAllTitles(User user, String title) {
+  public List<Watchlist> getByTitle(User user, String title) {
+    return this.watchlistRepository.findByUserAndTitle(user, title); 
+    
+  }
+
+  public List<Watchlist> getAllTitles(User user) {
     return this.watchlistRepository.findByUser(user); 
   }
 

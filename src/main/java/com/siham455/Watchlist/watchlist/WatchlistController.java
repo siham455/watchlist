@@ -37,13 +37,13 @@ public class WatchlistController {
 
 
     @GetMapping
-    public ResponseEntity<List<Watchlist>> getWatchlist(@PathVariable UUID userId, @RequestParam(required = false) String title) {
+    public ResponseEntity<List<Watchlist>> getWatchlist(@PathVariable UUID userId) {
         try {
             User user = userService.getUserById(userId);
             if (user == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
             }
-            List<Watchlist> watchlistTitles = watchlistService.getAllTitles(user, title);
+            List<Watchlist> watchlistTitles = watchlistService.getAllTitles(user);
             return new ResponseEntity<>(watchlistTitles, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
@@ -96,6 +96,20 @@ public class WatchlistController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Watchlist not found", e);
+        }
+    }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<List<Watchlist>> getTitle(@PathVariable UUID userId, @RequestParam(required = false) String title) {
+        try {
+            User user = userService.getUserById(userId);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+            List<Watchlist> watchlistTitles = watchlistService.getByTitle(user, title);
+            return new ResponseEntity<>(watchlistTitles, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
         }
     }
 
